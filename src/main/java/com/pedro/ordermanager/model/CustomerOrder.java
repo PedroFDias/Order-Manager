@@ -25,7 +25,6 @@ public class CustomerOrder {
     private  Integer productsSize;
 
     public CustomerOrder() {
-
         this.data = LocalDate.now();
     }
 

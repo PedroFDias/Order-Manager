@@ -7,114 +7,150 @@ import com.pedro.ordermanager.repository.CategoryRepository;
 import com.pedro.ordermanager.repository.CustomerOrderRepository;
 import com.pedro.ordermanager.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
+    private final CategoryRepository repositoryCategory;
+    private final CustomerOrderRepository repositoryCustomerOrder;
+    private final ProductRepository repositoryProduct;
     private Scanner scanner = new Scanner(System.in);
 
-    public void run(CategoryRepository repoCategory, CustomerOrderRepository repoCustomerOrder, ProductRepository repoProduct) {
+    public Main(CategoryRepository repositoryCategory, CustomerOrderRepository repositoryCustomerOrder, ProductRepository repositoryProduct) {
+        this.repositoryCategory = repositoryCategory;
+        this.repositoryCustomerOrder = repositoryCustomerOrder;
+        this.repositoryProduct = repositoryProduct;
+    }
+
+    public void run() {
         while (true) {
-            System.out.println("""
+
+            int choose = showMenu();;
+
+            switch (choose) {
+                case 1:
+                    createCategory();
+                    break;
+                case 2:
+                    createProduct();
+                    break;
+                case 3:
+                    createOrder();
+                    break;
+                case 4:
+                    findAllCategory();
+                    break;
+                case 5:
+                    findAllProducts();
+                    break;
+                case 6:
+                    findAllOrders();
+                    break;
+                case 7:
+                    listProductForName();
+                    break;
+                case 8:
+                    quitSystem();
+                default:
+                    System.out.println("Invalid choose!!");
+            }
+        }
+    }
+
+    private int showMenu() {
+        System.out.println("""
                     \n1- Create category
                     2- Create product
                     3- Create order
                     4- List categories
                     5- List products
                     6- List orders
-                    7- Go out
+                    7- List product for name
+                    8- Go out
                     """);
-            System.out.print("Choose an option: ");
-            int choose = scanner.nextInt();
-            scanner.nextLine();
+        System.out.print("Choose an option: ");
+        return scanner.nextInt();
+    }
 
-            String nome;
-            double price;
-            switch (choose) {
-                case 1:
-                    Category category = new Category(scanner.nextLine());
-                    repoCategory.save(category);
-                    break;
-                case 2:
-                    //Product category = new Category(scanner.nextLine());
-                    System.out.print("Informe o nome do produto: ");
-                    nome = scanner.nextLine();
-                    System.out.print("Informe o preco do produto: ");
-                    price = scanner.nextDouble();
-                    scanner.nextLine();
+    private void quitSystem() {
+        System.out.println("Going out!");
+        scanner.close();
+        return;
+    }
 
-                    System.out.println("Choose an category: ");
-                    repoCategory.findAll().forEach(c -> System.out.println(c.getId() + "° Category: " + c.getName()));
-                    List<Category> categories = repoCategory.findAll();
-                    int chooseCategory = scanner.nextInt();
-                    scanner.nextLine();
-                    repoProduct.save(new Product(nome, price, categories.get(chooseCategory - 1)));
-                    break;
-                case 3:
-                    System.out.println("Enter the product name: ");
-                    String productName = scanner.nextLine();
+    private void listProductForName() {
+        System.out.println("Enter a part of product name to search: ");
+        String partName = scanner.nextLine();
+        Optional<List<Product>> listProducts = repositoryProduct.findByPartOfTheName(partName);
 
-                    var product = repoProduct.findByName(productName);
+        listProducts.ifPresent(listproducts ->
+                listproducts.forEach(p -> System.out.println(p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() + " | Own category: " + p.getCategory().getName())));
+    }
 
-                    if (product != null) {
-                        CustomerOrder order = new CustomerOrder();
-                        order.addProduct(product);
+    private void findAllOrders() {
+        repositoryCustomerOrder.findAll().forEach(o -> {
+            System.out.println(o.getId() + "° Order: " + o.getData() + " | n° products: " + o.getProductsSize());
 
-                        //product.setOrders(order); // Garante a relação bidirecional
-                        //product.getOrders().forEach(System.out::println);
-                        //repoProduct.save(product); // Salva a atualização do relacionamento no banco
-                        repoCustomerOrder.save(order);
+            o.getProducts().forEach(p -> System.out.println("   " + p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() + " | Own category: " + (p.getCategory() != null ? p.getCategory().getName() : "No category")));
+        });
+    }
 
-                        System.out.println("Order created successfully!");
-                    } else {
-                        System.out.println("Product not found.");
-                    }
-                    break;
-                case 4:
-                    repoCategory.findAll().forEach(c -> System.out.println(c.getId() + "° Category: " + c.getName() + " | n° products: " + c.getProductsSize()));
-                    break;
-                case 5:
-                    repoProduct.findAll().forEach(p -> System.out.println(p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() + " | Own category: " + p.getCategory().getName()));
-                    break;
-                case 6:
-                    repoCustomerOrder.findAll().forEach(o -> {
-                        System.out.println(o.getId() + "° Order: " + o.getData() + " | n° products: " + o.getProductsSize());
+    private void findAllProducts() {
+        repositoryProduct.findAll().forEach(p -> System.out.println(p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() + " | Own category: " + p.getCategory().getName()));
+    }
 
-                        o.getProducts().forEach(p ->
-                                System.out.println("   " + p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() +
-                                        " | Own category: " + (p.getCategory() != null ? p.getCategory().getName() : "No category"))
-                        );
-                    });
+    private void findAllCategory() {
+        repositoryCategory.findAll().forEach(c -> System.out.println(c.getId() + "° Category: " + c.getName() + " | n° products: " + c.getProductsSize()));
+    }
 
-                    break;
-                case 7:
-                    System.out.println("Going out!");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("Invalid choose!!");
+    private void createOrder() {
+        repositoryProduct.findAll().forEach(p -> System.out.println(p.getId() + "° Product: " + p.getName() + " - R$" + p.getPrice() + " | Own category: " + p.getCategory().getName()));
+        System.out.println("Enter the product name, enter with 0 to out: ");
+        var listOrders = new ArrayList<Product>();
+
+        String productName;
+        do {
+            productName = scanner.nextLine();
+            if (!productName.equals("0")) {
+                Optional<Product> optionalProduct = repositoryProduct.findByNameContainingIgnoreCase(productName);
+                if (optionalProduct.isPresent()) {
+                    optionalProduct.ifPresent(listOrders::add);
+                    System.out.println("Product add successfully!");
+                } else {
+                    System.out.println("Product not found.");
+                }
             }
-        }
+        } while (!productName.equals("0"));
+        CustomerOrder order = new CustomerOrder();
+        order.setProducts(listOrders);
+
+        repositoryCustomerOrder.save(order);
+    }
+
+    private void createProduct() {
+        String nome;
+        double price;
+        //Product category = new Category(scanner.nextLine());
+        System.out.print("Informe o nome do produto: ");
+        nome = scanner.nextLine();
+        System.out.print("Informe o preco do produto: ");
+        price = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.println("Choose an category: ");
+        repositoryCategory.findAll().forEach(c -> System.out.println(c.getId() + "° Category: " + c.getName()));
+        List<Category> categories = repositoryCategory.findAll();
+        int chooseCategory = scanner.nextInt();
+        scanner.nextLine();
+        repositoryProduct.save(new Product(nome, price, categories.get(chooseCategory - 1)));
+    }
+
+    private void createCategory() {
+        Category category = new Category(scanner.nextLine());
+        repositoryCategory.save(category);
     }
 }
-//        var category = repoCategory.findByName("Pet");
-//        System.out.println(category.getName());
-//        // Criação dos produtos
-//        Product product = new Product("Computer", 5000.0, category);
-//        //repoProduct.save(product);
-/// /        Product product2 = new Product("PlacaDeVideo", 15000.0, category2);
-/// /
-/// /        // Criando o pedido e associando os produtos
-//        CustomerOrder order = new CustomerOrder();
-//        order.addProduct(product);
-/// /        order.addProduct(product2);
-//        repoCustomerOrder.save(order);
 
-//        // Salvar o pedido com os produtos associados
-//        product.getOrders().add(order);
-//        product2.getOrders().add(order);
-//        repoProduct.save(product);
-//        repoProduct.save(product2);
-//
 
