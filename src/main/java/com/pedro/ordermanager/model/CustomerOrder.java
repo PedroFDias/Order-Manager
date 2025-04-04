@@ -1,6 +1,9 @@
 package com.pedro.ordermanager.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
@@ -8,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,25 +30,8 @@ public class CustomerOrder {
 
     private  Integer productsSize;
 
-    public CustomerOrder() {
-        this.data = LocalDate.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-
     public Integer getProductsSize() {
         return products != null ? products.size() : 0;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
     }
 
     public void setProducts(List<Product> products) {
@@ -57,9 +46,5 @@ public class CustomerOrder {
             this.productsSize = products != null ? products.size() : 0;
         }
 
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 }

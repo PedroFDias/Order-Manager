@@ -1,66 +1,32 @@
 package com.pedro.ordermanager.model;
 
+import com.pedro.ordermanager.dto.ProductDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double price;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     private Category category;
-    @ManyToMany(mappedBy = "products" , fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
     private List<CustomerOrder> orders = new ArrayList<>();
 
-    public Product() {
-    }
-    public Product(String name, Double price, Category category) {
-        this.name = name;
-        this.price = price;
-        this.category = category;
-    }
-
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<CustomerOrder> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(CustomerOrder orders) {
-        this.orders.add(orders);
+    public Product (ProductDTO productDTO){
+        this.name = productDTO.name();
+        this.price = productDTO.price();
+        this.category = productDTO.category();
     }
 }
