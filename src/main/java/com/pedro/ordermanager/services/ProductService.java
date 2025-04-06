@@ -1,9 +1,12 @@
 package com.pedro.ordermanager.services;
 
 import com.pedro.ordermanager.dto.ProductDTO;
+import com.pedro.ordermanager.dto.ProductUpdateDTO;
 import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,22 +18,33 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public List<ProductDTO> getProducts() {
+    public List<ProductDTO> get() {
         return convertDatas(Optional.of(repository.findAll()));
     }
+    public Page<ProductDTO> getPage(Pageable pageable) {
+        return repository.findAll(pageable).map(ProductDTO::new);
+    }
 
-    public List<ProductDTO> getTop5MoreExpensive() {
+    public List<ProductDTO> getTop5() {
         return convertDatas(repository.findTop5ByOrderByPriceDesc());
     }
 
-    public void postProducts(ProductDTO productDTO) {
+    public void post(ProductDTO productDTO) {
         repository.save(new Product(productDTO));
     }
 
+    public void update(ProductUpdateDTO productDTO){
+        var product = repository.getReferenceById(productDTO.id());
+        product.updateProduct(productDTO);
+    }
 
     private List<ProductDTO> convertDatas(Optional<List<Product>> products) {
         return products.map(productList -> productList.stream()
-                .map(p -> new ProductDTO( p.getName(), p.getPrice(), p.getCategory()))
+                .map(ProductDTO::new)
                 .collect(Collectors.toList())).orElse(null);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

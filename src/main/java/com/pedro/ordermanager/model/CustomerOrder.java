@@ -20,31 +20,34 @@ public class CustomerOrder {
     private Long id;
     @CreatedDate
     private LocalDate data;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "product_orders",
-            joinColumns = @JoinColumn(name = "orders_id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id")
-    )
-    private List<Product> products = new ArrayList<>();
+//    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "product_orders",
+//            joinColumns = @JoinColumn(name = "orders_id"),
+//            inverseJoinColumns = @JoinColumn(name = "products_id")
+//    )
+    //private List<Product> products = new ArrayList<>();
 
     private  Integer productsSize;
 
-    public Integer getProductsSize() {
-        return products != null ? products.size() : 0;
-    }
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Item> items;
 
-    public void setProducts(List<Product> products) {
-        this.products.clear();
-        products.forEach(this::addProduct);
-    }
+//    public Integer getProductsSize() {
+//        return products != null ? products.size() : 0;
+//    }
 
-    public void addProduct(Product product) {
-        if (!this.products.contains(product)) {
-            this.products.add(product);
-            product.getOrders().add(this);
-            this.productsSize = products != null ? products.size() : 0;
-        }
+//    public void setProducts(List<Product> products) {
+//        this.products.clear();
+//        products.forEach(this::addProduct);
+//    }
 
-    }
+//    public void addProduct(Product product) {
+//        if (!this.products.contains(product)) {
+//            this.products.add(product);
+//            product.getOrders().add(this);
+//            this.productsSize = products != null ? products.size() : 0;
+//        }
+//
+//    }
 }
