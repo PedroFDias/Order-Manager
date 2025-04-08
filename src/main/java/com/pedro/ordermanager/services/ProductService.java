@@ -1,9 +1,11 @@
 package com.pedro.ordermanager.services;
 
+import com.pedro.ordermanager.dto.ProductCreateDTO;
 import com.pedro.ordermanager.dto.ProductDTO;
 import com.pedro.ordermanager.dto.ProductUpdateDTO;
 import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +31,7 @@ public class ProductService {
         return convertDatas(repository.findTop5ByOrderByPriceDesc());
     }
 
-    public void post(ProductDTO productDTO) {
+    public void post(@Valid ProductCreateDTO productDTO) {
         repository.save(new Product(productDTO));
     }
 

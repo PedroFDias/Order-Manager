@@ -1,12 +1,9 @@
 package com.pedro.ordermanager.dto;
 
 import com.pedro.ordermanager.model.Category;
-import com.pedro.ordermanager.model.CustomerOrder;
 import com.pedro.ordermanager.model.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
 
 public record ProductDTO (
         @NotNull

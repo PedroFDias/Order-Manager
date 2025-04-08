@@ -1,5 +1,6 @@
 package com.pedro.ordermanager.controller;
 
+import com.pedro.ordermanager.dto.ProductCreateDTO;
 import com.pedro.ordermanager.dto.ProductDTO;
 import com.pedro.ordermanager.dto.ProductUpdateDTO;
 import com.pedro.ordermanager.model.Product;
@@ -36,7 +37,7 @@ public class ProductController {
 
     @PostMapping
     @Transactional
-    public void registerProduct(@RequestBody @Valid ProductDTO data){
+    public void registerProduct(@RequestBody @Valid ProductCreateDTO data){
         service.post(data);
     }
 
