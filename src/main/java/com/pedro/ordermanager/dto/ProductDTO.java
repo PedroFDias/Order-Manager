@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record ProductDTO (
-        @NotNull
-        Long id,
-        @NotBlank
-        String name,
-        @NotNull
-        Double price,
-        @NotNull
-        Category category){
+                         @NotNull
+                         Long id,
+                         @NotBlank
+                         String name,
+                         @NotNull
+                         Double price,
+                         @NotNull
+                         Category category){
 
         public ProductDTO(Product product){
                 this(product.getId(), product.getName(),product.getPrice(),product.getCategory());
