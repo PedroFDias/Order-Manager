@@ -3,19 +3,16 @@ package com.pedro.ordermanager.services;
 import com.pedro.ordermanager.dto.CreateCustomerOrderDTO;
 import com.pedro.ordermanager.dto.CustomerOrderDTO;
 import com.pedro.ordermanager.dto.ItemDTO;
-import com.pedro.ordermanager.dto.ProductDTO;
 import com.pedro.ordermanager.model.CustomerOrder;
 import com.pedro.ordermanager.model.Item;
 import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.repository.CustomerOrderRepository;
 import com.pedro.ordermanager.repository.ProductRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
