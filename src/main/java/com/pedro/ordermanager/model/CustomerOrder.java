@@ -1,17 +1,18 @@
 package com.pedro.ordermanager.model;
 
-import com.pedro.ordermanager.dto.CustomerOrderDTO;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerOrder {
@@ -26,8 +27,7 @@ public class CustomerOrder {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Item> items;
 
-    public CustomerOrder(@Valid CustomerOrderDTO orderDTO){
-        this.data = orderDTO.data();
-        this.productsSize = orderDTO.sizeItems();
-    }
+//    public CustomerOrder(CreateCustomerOrderDTO orderDTO){
+//        this.productsSize = orderDTO.;
+//    }
 }

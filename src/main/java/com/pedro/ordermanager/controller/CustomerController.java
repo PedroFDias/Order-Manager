@@ -1,5 +1,6 @@
 package com.pedro.ordermanager.controller;
 
+import com.pedro.ordermanager.dto.CreateCustomerOrderDTO;
 import com.pedro.ordermanager.dto.CustomerOrderDTO;
 import com.pedro.ordermanager.services.CustomerService;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,7 @@ public class CustomerController {
 
     @PostMapping
     @Transactional
-    public void postOrder(@RequestBody @Valid CustomerOrderDTO data){
+    public void postOrder(@RequestBody @Valid CreateCustomerOrderDTO data){
         service.post(data);
     }
 }
