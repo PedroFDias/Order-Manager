@@ -47,8 +47,8 @@ public class CustomerService {
         for (Item item : items) {
             item.setOrder(order); // Vincula o pedido em cada item
         }
-
         order.setItems(items);
+        order.setTotalItems();
 
         repository.save(order);
     }

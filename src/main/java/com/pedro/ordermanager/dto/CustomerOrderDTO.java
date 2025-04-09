@@ -13,8 +13,8 @@ public record CustomerOrderDTO (
                                 @NotBlank
                                 LocalDate data,
                                 @NotNull
-                                Integer sizeItems) {
+                                Integer totalItems) {
     public CustomerOrderDTO(CustomerOrder order){
-        this(order.getId(), order.getData(), order.getProductsSize());
+        this(order.getId(), order.getData(), order.getTotalItems());
     }
 }

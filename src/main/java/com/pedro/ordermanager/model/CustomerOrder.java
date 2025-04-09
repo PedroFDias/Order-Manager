@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,12 +21,14 @@ public class CustomerOrder {
     @CreatedDate
     private LocalDate data;
 
-    private  Integer productsSize;
+    private  Integer totalItems;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Item> items;
 
-//    public CustomerOrder(CreateCustomerOrderDTO orderDTO){
-//        this.productsSize = orderDTO.;
-//    }
+    public void setTotalItems(){
+        this.totalItems = items.stream()
+                .mapToInt(Item::getQuantity)
+                .sum();
+    }
 }
