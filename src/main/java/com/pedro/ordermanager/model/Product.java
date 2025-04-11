@@ -20,6 +20,8 @@ public class Product {
 
     private String name;
 
+    private Boolean available = true;
+
     private Double price;
 
     @Enumerated(EnumType.STRING)
@@ -41,5 +43,9 @@ public class Product {
             this.price = data.price();
         if(data.category() != null)
             this.category = data.category();
+    }
+
+    public void delete() {
+        this.available = false;
     }
 }
