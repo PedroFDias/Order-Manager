@@ -105,11 +105,12 @@ Exemplo de resposta ao buscar um pedido:
 
 ## 🛠 Estrutura do projeto
 
-- `CustomerOrder` → representa um pedido do cliente  
-- `Item` → representa o item do pedido, com quantidade e produto  
-- `Product` → produto disponível no sistema  
-- `OrderController`, `ProductController` → endpoints REST  
-- `DTOs` → para entrada e saída de dados  
+- `dto/` → Objetos que trafegam entre o cliente e o servidor
+- `controller/` → Onde ficam os endpoints da API (os @RestController)
+- `model/` → Entidades JPA que representam as tabelas no banco
+- `repository/` → Interfaces que estendem JpaRepository
+- `service/` → Regras de negócio
+- `resources/` → Configurações da aplicação
 
 ---
 
