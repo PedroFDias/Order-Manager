@@ -3,6 +3,7 @@ package com.pedro.ordermanager.controller;
 import com.pedro.ordermanager.dto.ProductCreateDTO;
 import com.pedro.ordermanager.dto.ProductResponseDTO;
 import com.pedro.ordermanager.dto.ProductUpdateDTO;
+import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.services.ProductService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -23,6 +25,11 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getProducts() {
         var products = service.get();
+        return ResponseEntity.ok(products);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductsById(@PathVariable Long id) {
+        var products = service.get(id);
         return ResponseEntity.ok(products);
     }
 
@@ -40,9 +47,10 @@ public class ProductController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity registerProduct(@RequestBody @Valid ProductCreateDTO data){
+    public ResponseEntity registerProduct(@RequestBody @Valid ProductCreateDTO data, UriComponentsBuilder uriBuilder){
         var response = service.post(data);
-        return ResponseEntity.ok(response);
+        var uri = uriBuilder.path("/products/{id}").buildAndExpand(response.id()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping
@@ -56,7 +64,7 @@ public class ProductController {
     @Transactional
     public ResponseEntity delete(@PathVariable Long id){
         var data = service.delete(id);
-        return ResponseEntity.ok(data);
+        return ResponseEntity.noContent().build();
     }
 
 }

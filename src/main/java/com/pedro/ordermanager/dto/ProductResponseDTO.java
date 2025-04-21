@@ -7,7 +7,4 @@ public record ProductResponseDTO(Long id, String name, Double price, Category ca
     public ProductResponseDTO(Product product){
         this(product.getId(), product.getName(), product.getPrice(), product.getCategory());
     }
-    public ProductResponseDTO(ProductCreateDTO product){
-        this(null, product.name(), product.price(), product.category());
-    }
 }

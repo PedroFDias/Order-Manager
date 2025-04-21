@@ -20,6 +20,9 @@ public class ProductService {
     public List<ProductResponseDTO> get() {
         return convertData(Optional.of(repository.findAllByAvailableTrue()));
     }
+    public ProductResponseDTO get(Long id) {
+        return new ProductResponseDTO(repository.getReferenceById(id));
+    }
     public Page<ProductResponseDTO> getPage(Pageable pageable) {
         return repository.findAllByAvailableTrue(pageable).map(ProductResponseDTO::new);
     }
@@ -28,9 +31,9 @@ public class ProductService {
         return convertData(repository.findTop5ByOrderByPriceDesc());
     }
 
-    public ProductCreateResponseDTO post(@Valid ProductCreateDTO productDTO) {
-        repository.save(new Product(productDTO));
-        return new ProductCreateResponseDTO(productDTO);
+    public ProductResponseDTO post(@Valid ProductCreateDTO productDTO) {
+        var response = repository.save(new Product(productDTO));
+        return new ProductResponseDTO(response);
     }
 
     public ProductResponseDTO update(ProductUpdateDTO productDTO){
