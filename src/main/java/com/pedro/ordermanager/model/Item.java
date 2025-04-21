@@ -1,5 +1,7 @@
 package com.pedro.ordermanager.model;
 
+import com.pedro.ordermanager.dto.CustomerOrderUpdateDTO;
+import com.pedro.ordermanager.dto.ItemDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +25,10 @@ public class Item {
 
     @ManyToOne
     private CustomerOrder order;
+
+    public Item(ItemDTO item){
+        this.product = new Product(); // precisa ser buscado do banco no real
+        this.product.setId(item.productId());
+        this.quantity = item.quantity();
+    }
 }

@@ -2,11 +2,15 @@ package com.pedro.ordermanager.controller;
 
 import com.pedro.ordermanager.dto.CreateCustomerOrderDTO;
 import com.pedro.ordermanager.dto.CustomerOrderDTO;
-import com.pedro.ordermanager.services.CustomerService;
+import com.pedro.ordermanager.dto.CustomerOrderUpdateDTO;
+import com.pedro.ordermanager.dto.CustomerResponseDTO;
+import com.pedro.ordermanager.services.CustomerOrderService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -14,16 +18,38 @@ import java.util.List;
 @RequestMapping("/customer")
 public class CustomerController {
     @Autowired
-    private CustomerService service;
+    private CustomerOrderService service;
 
     @GetMapping
-    public List<CustomerOrderDTO> getOrders(){
-        return service.get();
+    public ResponseEntity<List<CustomerResponseDTO>> getOrders(){
+        var response = service.get();
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity getOrder(@PathVariable Long id){
+        var response = service.get(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
     @Transactional
-    public void postOrder(@RequestBody @Valid CreateCustomerOrderDTO data){
-        service.post(data);
+    public ResponseEntity postOrder(@RequestBody @Valid CreateCustomerOrderDTO data, UriComponentsBuilder uriBuilder){
+        var response = service.post(data);
+        var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response).toUri();
+        return ResponseEntity.created(uri).body(response);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity update(@RequestBody @Valid CustomerOrderUpdateDTO data){
+        var response = service.update(data);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id){
+        var response = service.delete(id);
+        return ResponseEntity.ok(response);
     }
 }

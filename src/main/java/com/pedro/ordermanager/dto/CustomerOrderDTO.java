@@ -8,11 +8,11 @@ import java.time.LocalDate;
 public record CustomerOrderDTO (
                                 @NotNull
                                 Long id,
-                                @NotBlank
-                                LocalDate data,
+                                @NotNull
+                                LocalDate date,
                                 @NotNull
                                 Integer totalItems) {
     public CustomerOrderDTO(CustomerOrder order){
-        this(order.getId(), order.getData(), order.getTotalItems());
+        this(order.getId(), order.getDate(), order.getTotalItems());
     }
 }
