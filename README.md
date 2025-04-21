@@ -62,8 +62,24 @@ Este projeto tem como objetivo praticar e aplicar conceitos de APIs RESTful, map
 ## 📷 Exemplos de uso
 
 A API pode ser testada via **Postman** ou **Insomnia**.  
+Exemplo do corpo da requisição para cadastrar um pedido:
+```json
+{
+	"items" : [
+		{"productId": 12, "quantity":4},
+		{"productId": 4, "quantity": 1}
+	]
+}
+```
+Exemplo de resposta ao cadastrar um pedido:
+```json
+{
+	"id": 17,
+	"date": "2025-04-21",
+	"totalItems": 5
+}
+```
 Exemplo de resposta ao buscar um pedido:
-
 ```json
 {
 	"id": 17,
@@ -85,7 +101,6 @@ Exemplo de resposta ao buscar um pedido:
 	]
 }
 ```
-
 ---
 
 ## 🛠 Estrutura do projeto
