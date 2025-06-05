@@ -3,7 +3,6 @@ package com.pedro.ordermanager.controller;
 import com.pedro.ordermanager.dto.ProductCreateDTO;
 import com.pedro.ordermanager.dto.ProductResponseDTO;
 import com.pedro.ordermanager.dto.ProductUpdateDTO;
-import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.services.ProductService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

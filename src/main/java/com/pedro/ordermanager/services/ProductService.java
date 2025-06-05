@@ -1,9 +1,10 @@
 package com.pedro.ordermanager.services;
 
-import com.pedro.ordermanager.dto.*;
+import com.pedro.ordermanager.dto.ProductCreateDTO;
+import com.pedro.ordermanager.dto.ProductResponseDTO;
+import com.pedro.ordermanager.dto.ProductUpdateDTO;
 import com.pedro.ordermanager.model.Product;
 import com.pedro.ordermanager.repository.ProductRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class ProductService {
         return convertData(repository.findTop5ByOrderByPriceDesc());
     }
 
-    public ProductResponseDTO post(@Valid ProductCreateDTO productDTO) {
+    public ProductResponseDTO post(ProductCreateDTO productDTO) {
         var response = repository.save(new Product(productDTO));
         return new ProductResponseDTO(response);
     }
@@ -42,15 +43,15 @@ public class ProductService {
         return new ProductResponseDTO(product);
     }
 
-    private List<ProductResponseDTO> convertData(Optional<List<Product>> products) {
-        return products.map(productList -> productList.stream()
-                .map(ProductResponseDTO::new)
-                .collect(Collectors.toList())).orElse(null);
-    }
-
     public ProductResponseDTO delete(Long id) {
         var product = repository.getReferenceById(id);
         product.delete();
         return new ProductResponseDTO(product);
+    }
+
+    private List<ProductResponseDTO> convertData(Optional<List<Product>> products) {
+        return products.map(productList -> productList.stream()
+                .map(ProductResponseDTO::new)
+                .collect(Collectors.toList())).orElse(null);
     }
 }
