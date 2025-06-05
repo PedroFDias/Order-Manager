@@ -1,6 +1,5 @@
 package com.pedro.ordermanager.model;
 
-import com.pedro.ordermanager.dto.CustomerOrderUpdateDTO;
 import com.pedro.ordermanager.dto.ItemDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
