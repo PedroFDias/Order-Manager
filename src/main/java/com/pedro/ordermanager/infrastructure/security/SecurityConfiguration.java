@@ -22,16 +22,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     @Autowired
-    private SecurityFilter securityFilter;
+    SecurityFilter securityFilter;
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
-    public AuthenticationManager authenticationManager (AuthenticationConfiguration configuration) throws Exception{
-        return configuration.getAuthenticationManager();
+    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "auth/register").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return  authenticationConfiguration.getAuthenticationManager();
     }
 }
