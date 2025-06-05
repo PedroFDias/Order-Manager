@@ -1,6 +1,5 @@
 package com.pedro.ordermanager.model;
 
-import com.pedro.ordermanager.dto.CustomerOrderDTO;
 import com.pedro.ordermanager.dto.CustomerOrderUpdateDTO;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;

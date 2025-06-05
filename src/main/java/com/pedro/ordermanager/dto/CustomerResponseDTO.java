@@ -1,7 +1,6 @@
 package com.pedro.ordermanager.dto;
 
 import com.pedro.ordermanager.model.CustomerOrder;
-import com.pedro.ordermanager.repository.ItemRepository;
 
 import java.time.LocalDate;
 import java.util.List;

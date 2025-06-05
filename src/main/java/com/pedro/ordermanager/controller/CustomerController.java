@@ -1,7 +1,6 @@
 package com.pedro.ordermanager.controller;
 
 import com.pedro.ordermanager.dto.CreateCustomerOrderDTO;
-import com.pedro.ordermanager.dto.CustomerOrderDTO;
 import com.pedro.ordermanager.dto.CustomerOrderUpdateDTO;
 import com.pedro.ordermanager.dto.CustomerResponseDTO;
 import com.pedro.ordermanager.services.CustomerOrderService;
@@ -35,7 +34,7 @@ public class CustomerController {
     @Transactional
     public ResponseEntity postOrder(@RequestBody @Valid CreateCustomerOrderDTO data, UriComponentsBuilder uriBuilder){
         var response = service.post(data);
-        var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response).toUri();
+        var uri = uriBuilder.path("/customer/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
 
