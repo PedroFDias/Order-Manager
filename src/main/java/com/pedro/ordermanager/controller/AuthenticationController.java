@@ -30,7 +30,7 @@ public class AuthenticationController {
     public ResponseEntity login(@RequestBody @Valid LoginRequestDTO body){
         User user = this.userRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("Usuario não encontrado -> Controller"));
 
-        if(passwordEncoder.matches(user.getPassword(), body.password())){
+        if(passwordEncoder.matches(body.password(),user.getPassword())){
             var token = tokenService.generateToken(user);
             return ResponseEntity.ok(new ResponseLoginDTO(user.getEmail(),token));
         }
@@ -45,10 +45,11 @@ public class AuthenticationController {
         if(user.isEmpty()){
             User newUser = new User();
             newUser.setEmail(body.email());
+            newUser.setUsername(body.username());
             newUser.setPassword(passwordEncoder.encode(body.password()));
             this.userRepository.save(newUser);
             var token = tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new ResponseLoginDTO(newUser.getEmail(),token));
+            return ResponseEntity.ok(new ResponseLoginDTO(newUser.getUsername(),token));
         }
 
         return ResponseEntity.badRequest().build();

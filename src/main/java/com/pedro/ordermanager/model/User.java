@@ -23,19 +23,10 @@ public class User implements UserDetails {
     private Long id;
     private String email;
     private String password;
+    private String username;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 }
