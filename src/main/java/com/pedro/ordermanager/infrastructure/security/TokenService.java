@@ -23,7 +23,7 @@ public class TokenService {
             var algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("Order Manager - API")
-                    .withSubject(user.getUsername())
+                    .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
 

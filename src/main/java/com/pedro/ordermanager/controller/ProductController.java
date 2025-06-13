@@ -4,6 +4,7 @@ import com.pedro.ordermanager.dto.ProductCreateDTO;
 import com.pedro.ordermanager.dto.ProductResponseDTO;
 import com.pedro.ordermanager.dto.ProductUpdateDTO;
 import com.pedro.ordermanager.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@SecurityRequirement(name = "bearer-key")
 public class ProductController {
     @Autowired
     private ProductService service;
